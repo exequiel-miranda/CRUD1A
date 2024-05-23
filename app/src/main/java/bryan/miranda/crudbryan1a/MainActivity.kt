@@ -1,5 +1,6 @@
 package bryan.miranda.crudbryan1a
 
+import RecyclerViewHelpers.Adaptador
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -9,9 +10,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import modelo.ClaseConexion
 import modelo.listaProductos
 
@@ -37,13 +40,34 @@ class MainActivity : AppCompatActivity() {
 
         ////////////Funcion para mostrar datos
         fun obtenerDatos(): List<listaProductos> {
+            //1- Creo una objeto de la clase conexion
             val objConexion = ClaseConexion().cadenaConexion()
 
             val statement = objConexion?.createStatement()
             val resultSet = statement?.executeQuery("select * from tbProductos1")!!
 
+            val listadoProductos = mutableListOf<listaProductos>()
+
+            //Recorrer todos los datos que me trajo el select
+            while (resultSet.next()){
+                val nombre = resultSet.getString("nombreProducto")
+                val producto = listaProductos(nombre)
+                listadoProductos.add(producto)
+            }
+            return listadoProductos
+        }
+
+        //Ejecutamos la funcion
+        CoroutineScope(Dispatchers.IO).launch {
+            val ejecutarFuncion = obtenerDatos()
 
 
+            withContext(Dispatchers.Main){
+                //Asigno el adaptador mi RecyclerView
+                //(Uno mi Adaptador con el RecyclerView)
+                val miAdaptador = Adaptador(ejecutarFuncion)
+                rcvDatos.adapter = miAdaptador
+            }
         }
 
 
