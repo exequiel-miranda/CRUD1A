@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import modelo.ClaseConexion
+import modelo.listaProductos
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,9 +33,24 @@ class MainActivity : AppCompatActivity() {
         val btnAgregar = findViewById<Button>(R.id.btnAgregar)
         val rcvDatos = findViewById<RecyclerView>(R.id.rcvDatos)
 
+        rcvDatos.layoutManager = LinearLayoutManager(this)
+
+        ////////////Funcion para mostrar datos
+        fun obtenerDatos(): List<listaProductos> {
+            val objConexion = ClaseConexion().cadenaConexion()
+
+            val statement = objConexion?.createStatement()
+            val resultSet = statement?.executeQuery("select * from tbProductos1")!!
+
+
+
+        }
+
+
         //2- Programar el boton de agregar
         btnAgregar.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO){
+
                 //1- Crear un objeto de la clase de conexion
                 val objConexion = ClaseConexion().cadenaConexion()
 
@@ -43,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 addProducto.setString(1, txtNombre.text.toString())
                 addProducto.setInt(2, txtPrecio.text.toString().toInt())
                 addProducto.setInt(3, txtCantidad.text.toString().toInt())
+
                 addProducto.executeUpdate()
             }
         }
