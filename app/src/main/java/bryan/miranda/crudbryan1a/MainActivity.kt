@@ -85,6 +85,14 @@ class MainActivity : AppCompatActivity() {
                 addProducto.setInt(3, txtCantidad.text.toString().toInt())
 
                 addProducto.executeUpdate()
+
+                val nuevosProductos = obtenerDatos()
+
+                //Creo una corrutina que actualice el listado
+                withContext(Dispatchers.Main){
+                    (rcvDatos.adapter as? Adaptador)?.actualizarRecyclerView(nuevosProductos)
+                }
+
             }
         }
 

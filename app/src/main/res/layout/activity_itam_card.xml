@@ -28,6 +28,20 @@
         android:text="TextView"
         android:textSize="34sp" />
 
+    <ImageView
+        android:id="@+id/imgEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_editar" />
+
+    <ImageView
+        android:id="@+id/imgBorrar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_borrar" />
+
   </LinearLayout>
 
 
