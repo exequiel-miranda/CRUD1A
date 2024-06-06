@@ -1,5 +1,8 @@
 package modelo
 
 data class listaProductos(
-    val nombreProducto: String
+    val uuid: String,
+    var nombreProducto: String,
+    var precio: Int,
+    var cantidad: Int
 )

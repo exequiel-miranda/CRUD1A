@@ -11,6 +11,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import modelo.ClaseConexion
 import modelo.listaProductos
+import java.util.UUID
 
 class Adaptador(private var Datos: List<listaProductos>): RecyclerView.Adapter<ViewHolder>() {
 
@@ -50,6 +51,33 @@ class Adaptador(private var Datos: List<listaProductos>): RecyclerView.Adapter<V
     }
 
 
+    fun actualizarListadoDespuesDeEditar(uuid: String, nuevoNombre: String){
+        //Obtener el UUID
+        val identificador = Datos.indexOfFirst { it.uuid == uuid }
+        //Asigno el nuevo nombre
+        Datos[identificador].nombreProducto = nuevoNombre
+        //Notifico que los cambios han sido realizados
+        notifyItemChanged(identificador)
+    }
+
+
+    //Creamos la funcion de editar o actualizar en la base de datos
+    fun editarProducto(nombreProducto: String,uuid: String){
+        //-Creo una corrutina
+        GlobalScope.launch(Dispatchers.IO){
+            //1- Creo un objeto de la clase conexion
+            val objConexion = ClaseConexion().cadenaConexion()
+
+            //2- Creo una variable que contenga un PrepareStatement
+            val updateProducto = objConexion?.prepareStatement("update tbProductos1 set nombreProducto = ? where uuid = ?")!!
+            updateProducto.setString(1, nombreProducto)
+            updateProducto.setString(2, uuid)
+            updateProducto.executeUpdate()
+
+            val commit = objConexion.prepareStatement("commit")
+            commit.executeUpdate()
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val vista = LayoutInflater.from(parent.context).inflate(R.layout.activity_itam_card, parent, false)

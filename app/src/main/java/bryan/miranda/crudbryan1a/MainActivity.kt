@@ -51,8 +51,11 @@ class MainActivity : AppCompatActivity() {
 
             //Recorrer todos los datos que me trajo el select
             while (resultSet.next()){
+                val uuid = resultSet.getString("uuid")
                 val nombre = resultSet.getString("nombreProducto")
-                val producto = listaProductos(nombre)
+                val precio = resultSet.getInt("precio")
+                val cantidad = resultSet.getInt("cantidad")
+                val producto = listaProductos(uuid, nombre, precio, cantidad)
                 listadoProductos.add(producto)
             }
             return listadoProductos
