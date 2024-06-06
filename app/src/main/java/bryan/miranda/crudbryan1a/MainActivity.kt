@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import modelo.ClaseConexion
 import modelo.listaProductos
+import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,10 +80,11 @@ class MainActivity : AppCompatActivity() {
                 val objConexion = ClaseConexion().cadenaConexion()
 
                 //2- Crear una variable que sea igual a un PrepareStatement
-                val addProducto = objConexion?.prepareStatement("insert into tbProductos1 values(?, ?, ?)")!!
-                addProducto.setString(1, txtNombre.text.toString())
-                addProducto.setInt(2, txtPrecio.text.toString().toInt())
-                addProducto.setInt(3, txtCantidad.text.toString().toInt())
+                val addProducto = objConexion?.prepareStatement("insert into tbProductos1(uuid, nombreProducto, precio, cantidad) values(?, ?, ?, ?)")!!
+                addProducto.setString(1, UUID.randomUUID().toString())
+                addProducto.setString(2, txtNombre.text.toString())
+                addProducto.setInt(3, txtPrecio.text.toString().toInt())
+                addProducto.setInt(4, txtCantidad.text.toString().toInt())
 
                 addProducto.executeUpdate()
 
